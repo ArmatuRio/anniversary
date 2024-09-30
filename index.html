@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Вікторина на річницю весілля</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* Задний фон с анимацией смены 19 фотографий */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background-size: cover;
+            background-position: center;
+            animation: slideBackground 95s infinite; /* 5 секунд на каждое изображение */
+        }
+
+        /* Анимация смены фона для 19 изображений */
+        @keyframes slideBackground {
+            0% { background-image: url('images/image1.jpg'); }
+            5.26% { background-image: url('images/image2.jpg'); }
+            10.53% { background-image: url('images/image3.jpg'); }
+            15.79% { background-image: url('images/image4.jpg'); }
+            21.05% { background-image: url('images/image5.jpg'); }
+            26.32% { background-image: url('images/image6.jpg'); }
+            31.58% { background-image: url('images/image7.jpg'); }
+            36.84% { background-image: url('images/image8.jpg'); }
+            42.11% { background-image: url('images/image9.jpg'); }
+            47.37% { background-image: url('images/image10.jpg'); }
+            52.63% { background-image: url('images/image11.jpg'); }
+            57.89% { background-image: url('images/image12.jpg'); }
+            63.16% { background-image: url('images/image13.jpg'); }
+            68.42% { background-image: url('images/image14.jpg'); }
+            73.68% { background-image: url('images/image15.jpg'); }
+            78.95% { background-image: url('images/image16.jpg'); }
+            84.21% { background-image: url('images/image17.jpg'); }
+            89.47% { background-image: url('images/image18.jpg'); }
+            94.74% { background-image: url('images/image19.jpg'); }
+            100% { background-image: url('images/image1.jpg'); }
+        }
+
+        #game-container {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            padding: 20px;
+            background-color: rgba(255, 255, 255, 0.8); /* Полупрозрачный белый фон */
+            max-width: 400px;
+            width: 100%;
+            box-sizing: border-box;
+            border-radius: 20px; /* Закругленные углы */
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Тень */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        h1 {
+            font-size: 1.5em;
+            margin-bottom: 10px;
+        }
+
+        #question {
+            font-size: 1.2em;
+            margin-bottom: 20px;
+        }
+
+        .button-container {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+        }
+
+        .button {
+            padding: 15px;
+            margin: 10px;
+            border: none;
+            background-color: #007BFF;
+            color: white;
+            cursor: pointer;
+            width: 45%;
+            box-sizing: border-box;
+            border-radius: 50%; /* Закругленные кнопки */
+            font-size: 1em;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 70px;
+        }
+
+        .button:hover {
+            background-color: #0056b3;
+        }
+
+        #message {
+            margin: 20px 0;
+            font-size: 1.2em;
+        }
+
+        #scoreboard {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        #scoreboard div {
+            display: flex;
+            align-items: center;
+            font-size: 1.5em;
+        }
+
+        #scoreboard div span {
+            margin-left: 10px;
+        }
+
+        #rotate-device-message {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: rgba(0, 0, 0, 0.8);
+            color: white;
+            font-size: 1.5em;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        /* Версия для мобильных устройств — кнопки будут расположены как на геймпаде */
+        @media (max-width: 600px) {
+            #game-container {
+                max-width: 200px;
+                
+            }
+
+            .button {
+                width: 45%; /* Ширина кнопок на мобильных устройствах */
+            }
+
+            .button-container {
+                display: flex;
+                justify-content: space-around;
+                flex-wrap: wrap;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="rotate-device-message">Будь ласка, переверніть пристрій горизонтально, щоб почати вікторину.</div>
+
+    <div id="game-container">
+        <h1>Вікторина на річницю весілля</h1>
+        <div id="question">Питання буде тут</div>
+        <div class="button-container">
+            <button class="button" onclick="chooseAnswer(0)">1</button>
+            <button class="button" onclick="chooseAnswer(1)">2</button>
+        </div>
+        <div class="button-container">
+            <button class="button" onclick="chooseAnswer(2)">3</button>
+            <button class="button" onclick="chooseAnswer(3)">4</button>
+        </div>
+        <div id="message"></div>
+        <div id="scoreboard">
+            <div><span>👍</span> <span id="correctCount">0</span></div>
+            <div><span>👎</span> <span id="wrongCount">0</span></div>
+        </div>
+    </div>
+
+    <script>
+        const questions = [
+            {
+                question: "Де ви вперше зустрілися?",
+                answers: ["У Квадрата", "На роботі", "У кафе", "На вечірці"],
+                correct: 0
+            },
+            {
+                question: "Яка ваша улюблена спільна подорож?",
+                answers: ["Париж", "Рим", "Катя", "Люба"],
+                correct: 3
+            },
+            {
+                question: "Яка ваша улюблена страва?",
+                answers: ["Піца", "Суші", "Борщ", "Паста"],
+                correct: 2
+            },
+            {
+                question: "Спільне заняття?",
+                answers: ["Ігрова приставка", "Катання на ковзанах", "Риболовля", "Бухання"],
+                correct: 3
+            },
+            {
+                question: "Яке бажання?",
+                answers: ["Діти", "Дім", "Віски", "Прибухнуть"],
+                correct: 1
+            },
+            {
+                question: "Улюблена марка авто?",
+                answers: ["Жигуль", "Hyundai SantaFe", "Audi", "BMW"],
+                correct: 1
+            },
+            {
+                question: "Побажання Нам?",
+                answers: ["Щастя", "Всего Хорошего!!!", "Бухла", "Взаємного кохання і все буде Добре!"],
+                correct: 3
+            }
+            // Добавьте остальные вопросы...
+        ];
+        let currentQuestionIndex = 0;
+        let correctCount = 0;
+        let wrongCount = 0;
+
+        function loadQuestion() {
+            const questionElement = document.getElementById('question');
+            const answerButtons = document.querySelectorAll('.button');
+            const currentQuestion = questions[currentQuestionIndex];
+
+            questionElement.textContent = currentQuestion.question;
+            answerButtons.forEach((button, index) => {
+                button.textContent = currentQuestion.answers[index];
+            });
+        }
+
+        function chooseAnswer(selectedIndex) {
+            const messageElement = document.getElementById('message');
+            const currentQuestion = questions[currentQuestionIndex];
+
+            if (selectedIndex === currentQuestion.correct) {
+                messageElement.textContent = 'Правильно! Ви добре знаєте один одного! 😊';
+                correctCount++;
+            } else {
+                messageElement.textContent = 'Неправильно. Спробуйте ще раз! 😢';
+                wrongCount++;
+            }
+
+            updateScoreboard();
+
+            currentQuestionIndex++;
+            if (currentQuestionIndex < questions.length) {
+                setTimeout(() => {
+                    messageElement.textContent = '';
+                    loadQuestion();
+                }, 2000);
+            } else {
+                setTimeout(() => {
+                    showFinalMessage();
+                }, 2000);
+            }
+        }
+
+        function updateScoreboard() {
+            document.getElementById('correctCount').textContent = correctCount;
+            document.getElementById('wrongCount').textContent = wrongCount;
+        }
+
+        function showFinalMessage() {
+            const gameContainer = document.getElementById('game-container');
+            gameContainer.innerHTML = `
+                <h1>Вітаємо!</h1>
+                <p>Ви завершили вікторину!</p>
+                <p>Правильні відповіді: ${correctCount}</p>
+                <p>Неправильні відповіді: ${wrongCount}</p>
+                <p>З річницею весілля привітаю,
+Хай буде все життя подібним раю,
+Щоб ти в коханні завше розквітали,
+Щоб птиці щастя в хату прилітали.
+Щоб були ми єдині в почуттях,
+Любилися, кохалися взаємно.
+Щасливого і довгого життя
+Укупочці бажаю нам приємно!</p>
+            `;
+        }
+
+        function checkOrientation() {
+            const rotateMessage = document.getElementById('rotate-device-message');
+            if (window.innerHeight > window.innerWidth) {
+                rotateMessage.style.display = 'flex';
+            } else {
+                rotateMessage.style.display = 'none';
+            }
+        }
+
+        window.addEventListener('resize', checkOrientation);
+        window.addEventListener('load', checkOrientation);
+
+        loadQuestion();
+    </script>
+</body>
+</html>

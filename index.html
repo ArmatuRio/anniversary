@@ -28,7 +28,6 @@
             animation: slideBackground 95s infinite; /* 5 секунд на каждое изображение */
         }
 
-        /* Анимация смены фона для 19 изображений */
         @keyframes slideBackground {
             0% { background-image: url('images/image1.jpg'); }
             5.26% { background-image: url('images/image2.jpg'); }
@@ -94,7 +93,7 @@
             cursor: pointer;
             width: 45%;
             box-sizing: border-box;
-            border-radius: 35%; /* Закругленные кнопки */
+            border-radius: 50%; /* Закругленные кнопки */
             font-size: 1em;
             display: flex;
             justify-content: center;
@@ -127,6 +126,7 @@
             margin-left: 10px;
         }
 
+        /* Черный фон и сообщение, когда устройство в портретной ориентации */
         #rotate-device-message {
             display: none;
             position: fixed;
@@ -134,20 +134,22 @@
             left: 0;
             width: 100vw;
             height: 100vh;
-            background-color: rgba(0, 0, 0, 0.8);
+            background-color: black;
             color: white;
             font-size: 1.5em;
             display: flex;
             justify-content: center;
             align-items: center;
             z-index: 1000;
+            text-align: center;
+            padding: 20px;
+            box-sizing: border-box;
         }
 
         /* Версия для мобильных устройств — кнопки будут расположены как на геймпаде */
         @media (max-width: 600px) {
             #game-container {
-                max-width: 200px;
-                
+                max-width: 300px;
             }
 
             .button {
@@ -185,7 +187,7 @@
 
     <script>
         const questions = [
-            {
+             {
                 question: "Де ви вперше зустрілися?",
                 answers: ["У Квадрата", "На роботі", "У кафе", "На вечірці"],
                 correct: 0
